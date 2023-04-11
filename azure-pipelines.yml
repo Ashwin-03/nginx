@@ -32,6 +32,14 @@ stages:
           $(tag)
         useDefaultContext: false
         buildContext: '.'
+    - task: Docker@1
+      displayName: 'Push the Docker image to Dockerhub'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryEndpoint: 'Docker Hub'
+        command: 'Push an image'
+        imageName: '$(ImageName)'
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest')) 
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(Build.SourcesDirectory)'
